@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class AccountService {
@@ -51,6 +53,32 @@ public class AccountService {
         BigDecimal  total = accounts.stream().map(Account::getBalance).reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return total;
+
+    }
+
+    public List<Account> fetchaccounts(User user) {
+
+        return accountRepository.findALLByUser(user);
+
+    }
+
+    public String deleteAccount(Long id, User user) {
+
+        Optional<Account> opAccount = accountRepository.findById(id);
+
+        if(opAccount.isPresent()){
+            Account account = opAccount.get();
+
+            if(account.getUser().getId()== user.getId()){
+                accountRepository.deleteById(id);
+                return "Account Deleted Successfully";
+            }
+
+            return "Access Denied";
+        }
+
+        return "Account doesn't exist";
+
 
     }
 }

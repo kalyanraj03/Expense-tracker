@@ -1,6 +1,7 @@
 package com.expensetracker.controller;
 
 import com.expensetracker.dto.AccountRequestDTO;
+import com.expensetracker.entity.Account;
 import com.expensetracker.entity.User;
 import com.expensetracker.service.AccountService;
 import jakarta.validation.Valid;
@@ -12,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/account")
@@ -45,6 +47,22 @@ public class AccountController {
         return new ResponseEntity<>(total, HttpStatus.OK);
 
     }
+
+    @GetMapping("/allaccounts")
+    public ResponseEntity<?> getAllAccounts(@AuthenticationPrincipal User user){
+
+        List<Account> accounts = accountService.fetchaccounts(user);
+
+        return new ResponseEntity<>(accounts, HttpStatus.OK);
+
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteAccount(@PathVariable Long id, @AuthenticationPrincipal User user){
+        String s = accountService.deleteAccount(id, user);
+        return ResponseEntity.status(200).body(s);
+    }
+
 
 
 
