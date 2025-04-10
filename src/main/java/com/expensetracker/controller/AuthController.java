@@ -17,16 +17,22 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDto dto){
+    public ResponseEntity<?> login(@RequestBody LoginDto dto) {
 
         String s = userService.loginUser(dto);
 
         return ResponseEntity.status(200).body(s);
 
-
-
-
-
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout() {
+        // Just a basic confirmation response
+        return ResponseEntity.ok("Logged out successfully.");
+    }
+
+
+
+
 
 }

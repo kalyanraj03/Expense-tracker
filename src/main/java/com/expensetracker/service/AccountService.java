@@ -5,19 +5,26 @@ import com.expensetracker.dto.AccountRequestDTO;
 import com.expensetracker.entity.Account;
 import com.expensetracker.entity.User;
 import com.expensetracker.repository.AccountRepository;
+import com.expensetracker.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalTime;
+import java.util.List;
 
 @Service
 public class AccountService {
 
     @Autowired
     private AccountRepository accountRepository;
+
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public String createAccount(AccountRequestDTO dto, User user) {
 
@@ -34,7 +41,16 @@ public class AccountService {
 
         return "Invalid Request";
 
+    }
 
+    public BigDecimal getTotal(User user) {
+
+        List<Account> accounts = accountRepository.findALLByUser(user);
+
+
+        BigDecimal  total = accounts.stream().map(Account::getBalance).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return total;
 
     }
 }

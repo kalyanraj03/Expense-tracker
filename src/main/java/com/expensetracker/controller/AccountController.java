@@ -9,10 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/v1/account")
@@ -36,5 +35,17 @@ public class AccountController {
 
         return new ResponseEntity<>(staus, HttpStatus.CREATED);
     }
+
+
+    @GetMapping("/balance/total")
+    public ResponseEntity<?> getTotalBalance(@AuthenticationPrincipal User user){
+
+        BigDecimal total = accountService.getTotal(user);
+
+        return new ResponseEntity<>(total, HttpStatus.OK);
+
+    }
+
+
 
 }
